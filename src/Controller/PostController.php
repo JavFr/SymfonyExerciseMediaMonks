@@ -15,8 +15,8 @@ class PostController extends AbstractController
      */
     public function index(PostRepository $postRepository, Request $request): Response
     {
-        $currentPage = $request->query->get('page', 1);
-        $posts = $postRepository->getAllPosts($currentPage);
+        $currentPage = (int) $request->query->get('page', 1);
+        $posts = $postRepository->getAllPostsPaginated($currentPage);
 
         $allPosts = $posts->count();
         $pagePosts = $posts->getIterator()->count();

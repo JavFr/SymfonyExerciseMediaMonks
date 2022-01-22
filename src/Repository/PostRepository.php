@@ -24,46 +24,33 @@ class PostRepository extends BaseRepository
      *
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
-    public function getAllPosts($currentPage = 1)
+    public function getAllPostsPaginated($currentPage = 1)
     {
         // Create our query
         $query = $this->createQueryBuilder('p')
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery();
 
-        // No need to manually get get the result ($query->getResult())
-
-        $paginator = $this->paginate($query, $currentPage);
+        $paginator = $this->paginateByPage($query, $currentPage);
 
         return $paginator;
     }
 
-    // /**
-    //  * @return Post[] Returns an array of Post objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     *
+     * @param integer $currentPage The current page (passed from controller)
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function getAllPostsPaginatedByOffset(int $offset = 0, int $limit = self::PAGINATION_DEFAULT_LIMIT)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        // Create our query
+        $query = $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery();
 
-    /*
-    public function findOneBySomeField($value): ?Post
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $paginator = $this->paginate($query, $offset, $limit);
+
+        return $paginator;
     }
-    */
 }

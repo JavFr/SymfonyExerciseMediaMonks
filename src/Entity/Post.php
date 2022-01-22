@@ -6,11 +6,13 @@ use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("slug")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Post
 {
@@ -18,34 +20,40 @@ class Post
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Serializer\Expose
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=3, max=255)
+     * @Serializer\Expose
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(min=3, max=255)
+     * @Serializer\Expose
      */
     private $body;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Regex(pattern="/^([a-z])(\-{0,1}[a-z])*$/", message="Only hypens and aplhanumeric characters.")
+     * @Serializer\Expose
      */
     private $slug;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Expose
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Serializer\Expose
      */
     private $updatedAt;
 
@@ -132,5 +140,17 @@ class Post
     public function __toString()
     {
         return $this->getSlug();
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'body' => $this->getBody(),
+            'slug' => $this->getSlug(),
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt()
+        ];
     }
 }
