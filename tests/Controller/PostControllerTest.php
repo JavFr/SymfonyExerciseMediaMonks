@@ -64,6 +64,19 @@ class PostControllerTest extends WebTestCase
 
     }
 
+    public function testItShowsACertainPost(): void
+    {
+        $post = $this->entityManager
+            ->getRepository(Post::class)
+            ->findOneBy([]);
+        
+        $client = static::createClient();
+        $crawler = $client->request('GET', "/posts/{$post->getSlug()}");
+
+        $this->assertResponseIsSuccessful();
+        $this->assertPageTitleContains($post->getTitle(), $crawler->first('h1')->text());
+    }
+
     protected function tearDown(): void
     {
         parent::tearDown();

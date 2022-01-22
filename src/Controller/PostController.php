@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/", name="posts")
      */
     public function index(PostRepository $postRepository, Request $request): Response
     {
@@ -25,5 +25,21 @@ class PostController extends AbstractController
 
 
         return $this->render('post/index.html.twig', compact('posts', 'currentPage', 'maxPages'));
+    }
+
+    /**
+     * @Route("/posts/{slug}", name="posts_show")
+     */
+    public function show(PostRepository $postRepository, string $slug): Response
+    {
+        $post = $postRepository->findOneBy(['slug' => $slug]);
+
+        if(!$post) {
+            throw $this->createNotFoundException(
+                'The post you are looking for does not exists.'
+            );
+        }
+
+        return $this->render('post/show.html.twig', compact('post'));
     }
 }
