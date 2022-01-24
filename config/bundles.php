@@ -26,4 +26,5 @@ return [
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
     ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
+    KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle::class => ['all' => true],
 ];
